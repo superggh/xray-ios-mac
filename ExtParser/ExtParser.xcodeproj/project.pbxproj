@@ -21,7 +21,7 @@
 		FBFFC2572ACC57AF00CE9ECE /* ETProtocolParserTrojan.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2492ACC57AE00CE9ECE /* ETProtocolParserTrojan.m */; };
 		FBFFC2582ACC57AF00CE9ECE /* ETVPNManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24A2ACC57AE00CE9ECE /* ETVPNManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBFFC2592ACC57AF00CE9ECE /* SimplePing.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24B2ACC57AE00CE9ECE /* SimplePing.h */; };
-		FBFFC25A2ACC57AF00CE9ECE /* ExtProtocolParserVmess.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24C2ACC57AE00CE9ECE /* ExtProtocolParserVmess.h */; };
+		FBFFC25A2ACC57AF00CE9ECE /* ETProtocolParserVmess.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24C2ACC57AE00CE9ECE /* ETProtocolParserVmess.h */; };
 		FBFFC25B2ACC57AF00CE9ECE /* ETProtocolParser.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24D2ACC57AE00CE9ECE /* ETProtocolParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBFFC25C2ACC57AF00CE9ECE /* ETProtocolParserVless.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC24E2ACC57AE00CE9ECE /* ETProtocolParserVless.m */; };
 		FBFFC25D2ACC57AF00CE9ECE /* ETProtocolParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC24F2ACC57AF00CE9ECE /* ETProtocolParser.m */; };
@@ -53,7 +53,7 @@
 		FBFFC2492ACC57AE00CE9ECE /* ETProtocolParserTrojan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParserTrojan.m; sourceTree = "<group>"; };
 		FBFFC24A2ACC57AE00CE9ECE /* ETVPNManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETVPNManager.h; sourceTree = "<group>"; };
 		FBFFC24B2ACC57AE00CE9ECE /* SimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePing.h; sourceTree = "<group>"; };
-		FBFFC24C2ACC57AE00CE9ECE /* ExtProtocolParserVmess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtProtocolParserVmess.h; sourceTree = "<group>"; };
+		FBFFC24C2ACC57AE00CE9ECE /* ETProtocolParserVmess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETProtocolParserVmess.h; sourceTree = "<group>"; };
 		FBFFC24D2ACC57AE00CE9ECE /* ETProtocolParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETProtocolParser.h; sourceTree = "<group>"; };
 		FBFFC24E2ACC57AE00CE9ECE /* ETProtocolParserVless.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParserVless.m; sourceTree = "<group>"; };
 		FBFFC24F2ACC57AF00CE9ECE /* ETProtocolParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParser.m; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 				FBFFC2492ACC57AE00CE9ECE /* ETProtocolParserTrojan.m */,
 				FBFFC2422ACC57AE00CE9ECE /* ETProtocolParserVless.h */,
 				FBFFC24E2ACC57AE00CE9ECE /* ETProtocolParserVless.m */,
-				FBFFC24C2ACC57AE00CE9ECE /* ExtProtocolParserVmess.h */,
+				FBFFC24C2ACC57AE00CE9ECE /* ETProtocolParserVmess.h */,
 				FBFFC2472ACC57AE00CE9ECE /* ETProtocolParserVmess.m */,
 				FBFFC24A2ACC57AE00CE9ECE /* ETVPNManager.h */,
 				FBFFC2482ACC57AE00CE9ECE /* ETVPNManager.m */,
@@ -136,7 +136,7 @@
 			files = (
 				FBFFC21D2ACC577800CE9ECE /* ExtParser.h in Headers */,
 				FBFFC25B2ACC57AF00CE9ECE /* ETProtocolParser.h in Headers */,
-				FBFFC25A2ACC57AF00CE9ECE /* ExtProtocolParserVmess.h in Headers */,
+				FBFFC25A2ACC57AF00CE9ECE /* ETProtocolParserVmess.h in Headers */,
 				FBFFC2542ACC57AF00CE9ECE /* ETProtocolParserSS.h in Headers */,
 				FBFFC2592ACC57AF00CE9ECE /* SimplePing.h in Headers */,
 				FBFFC2582ACC57AF00CE9ECE /* ETVPNManager.h in Headers */,
@@ -401,7 +401,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 85Z3G76RTQ;
+				DEVELOPMENT_TEAM = C48KFNDY4D;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -436,7 +436,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 85Z3G76RTQ;
+				DEVELOPMENT_TEAM = C48KFNDY4D;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
