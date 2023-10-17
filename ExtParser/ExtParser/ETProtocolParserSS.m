@@ -1,12 +1,11 @@
 //
-//  YDProtocolParserVmess.m
+//  YDProtocolParserSS.m
 //  maodou-vpn
 //
 //  Created by Badwin on 2023/9/12.
 //
 
-#import "ExtProtocolParserVmess.h"
-#import "ExtProtocolParser.h"
+#import "ETProtocolParserSS.h"
 
 static uint16_t __http_proxy_port__ = 1082;
 static NSString *__log_level__ = @"info";
@@ -16,7 +15,8 @@ static NSMutableArray *__directDomainList__ = nil;
 static NSMutableArray *__proxyDomainList__ = nil;
 static NSMutableArray *__blockDomainList__ = nil;
 
-@implementation ExtProtocolParserVmess
+@implementation ETProtocolParserSS
+
 
 +(void)setHttpProxyPort:(uint16_t)port {
     __http_proxy_port__ = port;
@@ -47,50 +47,79 @@ static NSMutableArray *__blockDomainList__ = nil;
     __blockDomainList__ = list.mutableCopy;
 }
 
-+(nullable NSDictionary *)parseVmess:(NSString *)uri {
++(NSString *)decodeBase64:(NSString *)base64Str {
+    NSInteger pp = base64Str.length % 4;
+    if (pp == 3) {
+        base64Str = [base64Str stringByAppendingString:@"="];
+    }
+    else if (pp == 2) {
+        base64Str = [base64Str stringByAppendingString:@"=="];
+    }
+    else if (pp == 1) {
+        base64Str = [base64Str stringByAppendingString:@"==="];
+    }
+    NSData *payload = [[NSData alloc] initWithBase64EncodedString:base64Str options:0];
+    NSString *prefix = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
+    return prefix;
+}
+
+
++(nullable NSDictionary *)parseSS:(NSString *)uri {
     uri = [uri stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
-    NSData *payload = [[NSData alloc] initWithBase64EncodedString:uri options:0];
-    if (payload.length == 0) {
-        NSLog(@"Invalid vmess:%@", uri);
-        return nil;
-    }
-    NSError *error;
-    NSDictionary *info = [NSJSONSerialization JSONObjectWithData:payload options:NSJSONReadingMutableContainers error:&error];
-    if (error) {
-        NSLog(@"%@", error);
-        return nil;
-    }
-    NSString *address = info[@"add"];
-    NSNumber *port = info[@"port"];
-    if (port && ![port isKindOfClass:NSNumber.class]) {
-        port = @(port.integerValue);
-    }
-    NSNumber *aid = info[@"aid"] ? info[@"aid"] : @0;
-    if (![aid isKindOfClass:NSNumber.class]) {
-        aid = @(aid.integerValue);
-    }
-    NSString *uuid = info[@"id"];
-    NSString *tag = info[@"ps"];
-    NSString *tls = info[@"tls"] ? info[@"tls"] : @"none";
     
-    NSString *wspath = info[@"path"];
-    NSString *wshost = info[@"host"];
-    NSString *remark = info[@"remark"] ? info[@"remark"] : info[@"ps"];
-    tag = @"proxy";
-    NSString *network = info[@"net"];
-
-    NSString *kcpKey = info[@"path"];
-
-    NSString *quicSecurity = info[@"host"];
-    NSString *quicKey = info[@"path"];
-    NSString *quicHeaderType = info[@"type"];
+//ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpkZGZlMTdmMS1iM2UwLTQ3YTYtYjk2NS03ZGM0Nzc2Y2VjNzA@hz-cm.youtushop.link:41533#%E6%96%B0%E5%8A%A0%E5%9D%A104
+//ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpLR005a1dAYzRoMG05eDJ0Ny1mYm5vZGUtYXIwMi42cHpmd2YuY29tOjU2MTAw#Argentina-02
     
-    if (!address || !port || !uuid || !tag || !network) return nil;
+    NSString *url = @"";
+    if ([uri containsString:@"@"]) {
+        NSArray <NSString *>*list = [uri componentsSeparatedByString:@"@"];
+        NSString *prefix = [ETProtocolParserSS decodeBase64:list[0]];
+        url = [prefix stringByAppendingString:@"@"];
+        url = [url stringByAppendingString:list[1]];
+    }
+    else{
+        NSArray <NSString *>*list = [uri componentsSeparatedByString:@"#"];
+        NSString *prefix = [ETProtocolParserSS decodeBase64:list[0]];
+        url = [prefix stringByAppendingString:@"#"];
+        url = [url stringByAppendingString:list[1]];
+    }
+    NSArray <NSString *>*list = [url componentsSeparatedByString:@"#"];
+    if (list.count != 2) return nil;
+    NSString *remark = list[1];
+    NSArray<NSString *> *userInfos =  [list[0] componentsSeparatedByString:@"@"];
+    if (userInfos.count != 2) return nil;
+    
+    NSString *userInfo = userInfos[0];
+    NSString *serverInfo = userInfos[1];
+    
+    NSArray<NSString *> *accountPasswords = [userInfo componentsSeparatedByString:@":"];
+    NSArray<NSString *> *ipPorts = [serverInfo componentsSeparatedByString:@":"];
+    
+    if (accountPasswords.count != 2 || ipPorts.count != 2) return nil;
+    
+    NSString *address = ipPorts[0];
+    NSNumber *port = @([ipPorts[1] integerValue]);
+    
+    NSString *tag = @"proxy";
+    NSString *network = @"tcp";
+    NSString *security = @"";
+    NSString *method = accountPasswords[0];
+    NSString *password = accountPasswords[1];
+    BOOL ota = false;
+    
+    NSString *kcpKey;
+    NSString *quicSecurity;
+    NSString *quicKey;
+    NSString *quicHeaderType;
+    
+    NSString *wspath;
+    NSString *wshost;
+    BOOL allowInsecure = false;
+    
+    if (!address || !port || !password || !tag || !network || !security) return nil;
     NSMutableDictionary *configuration = [NSMutableDictionary new];
     configuration[@"log"] = @{@"loglevel":__log_level__};
-    
-    NSMutableArray *rules = @[
-    ].mutableCopy;
+    NSMutableArray *rules = @[].mutableCopy;
     
     if (__proxyDomainList__.count > 0) {
         NSDictionary *A = @{
@@ -100,7 +129,7 @@ static NSMutableArray *__blockDomainList__ = nil;
         };
         [rules addObject:A];
     }
-    
+
     if (__blockDomainList__.count > 0) {
         NSDictionary *A = @{
             @"type": @"field",
@@ -156,7 +185,6 @@ static NSMutableArray *__blockDomainList__ = nil;
         @"domainStrategy" : @"AsIs",
         @"rules" : rules
     };
-    
 
     NSMutableArray *inbounds = [NSMutableArray new];
     configuration[@"inbounds"] = inbounds;
@@ -171,68 +199,53 @@ static NSMutableArray *__blockDomainList__ = nil;
         @"port" : @(__http_proxy_port__)
     };
     [inbounds addObject:defaultInbound];
-    
     NSMutableArray *outbounds = [NSMutableArray new];
     configuration[@"outbounds"] = outbounds;
     NSMutableDictionary *outbound = @{
-        @"mux": @{
-            @"concurrency": @8,
-            @"enabled": [NSNumber numberWithBool:false]
-        },
-        @"protocol":@"vmess",
+        @"protocol":@"shadowsocks",
         @"tag":tag,
         @"settings": @{
-            @"vnext" : @[
+            @"servers" : @[
                 @{
                     @"address":address,
                     @"port":port,
-                    @"users" :@[
-                        @{
-                            @"encryption":@"",
-                            @"security":@"auto",
-                            @"alterId":aid,
-                            @"id":uuid,
-                            @"flow":@"",
-                            @"level":@8
-                        }
-                    ]
+                    @"level":@8,
+                    @"method":method,
+                    @"ota":@(ota),
+                    @"password":password
                 }
             ]
         },
-        @"streamSettings" : @{
-            @"security" : tls,
-            @"network" : network,
-            @"tcpSettings": @{
-                @"header": @{
-                    @"type": @"none"
-                }
-            },
-            @"tlsSettings" : @{@"allowInsecure":@(NO), @"serverName":address}
-        }
     }.mutableCopy;
+    NSMutableDictionary *streamSettings = @{
+        @"security" : security,
+        @"network" : network,
+        @"tcpSettings":@{@"header":@{@"type":@"none"}},
+    }.mutableCopy;
+    outbound[@"streamSettings"] = streamSettings;
+    
+    if ([security isEqualToString:@"tls"]) {
+        streamSettings[@"tlsSettings"] = @{@"allowInsecure":@(allowInsecure), @"serverName":address};
+    }
     
     if ([network isEqualToString:@"ws"]) {
         if (wspath && wshost) {
             outbound[@"streamSettings"] = @{
-                @"security" : tls,
+                @"security" : security,
                 @"network" : network,
                 @"wsSettings" : @{
                     @"headers":@{
                         @"Host":wshost
                     },
                     @"path":wspath
-                },
-                @"tlsSettings": @{
-                    @"allowInsecure": @(NO),
-                    @"serverName": wshost
-                },
+                }
             };
         }
     }
     else if ([network isEqualToString:@"quic"]) {
-        if (quicKey && quicSecurity && quicHeaderType) {
+        if ([network isEqualToString:@"quic"] && quicKey && quicSecurity && quicHeaderType) {
             outbound[@"streamSettings"] = @{
-                @"security" : tls,
+                @"security" : security,
                 @"network" : network,
                 @"quicSettings" : @{
                     @"header":@{
@@ -243,10 +256,22 @@ static NSMutableArray *__blockDomainList__ = nil;
                 }
             };
         }
-    } else if([network isEqualToString:@"kcp"]) {
+    }
+    else if ([network isEqualToString:@"tcp"]) {
+        if ([security isEqualToString:@"xtls"]) {
+            outbound[@"streamSettings"] = @{
+                @"security" : security,
+                @"network" : network,
+                @"xtlsSettings" : @{
+                    @"serverName":address
+                }
+            };
+        }
+    }
+    else if ([network isEqualToString:@"kcp"]) {
         if (kcpKey) {
             outbound[@"streamSettings"] = @{
-                @"security" : tls,
+                @"security" : security,
                 @"network" : network,
                 @"kcpSettings": @{
                     @"congestion": [NSNumber numberWithBool:false],
@@ -270,6 +295,7 @@ static NSMutableArray *__blockDomainList__ = nil;
         @"protocol": @"freedom",
         @"settings": @{}
     };
+    
     NSDictionary *block = @{
         @"tag": @"block",
         @"protocol": @"blackhole",
@@ -281,19 +307,13 @@ static NSMutableArray *__blockDomainList__ = nil;
     };
     [outbounds addObject:direct];
     [outbounds addObject:block];
-    configuration[@"remark"] = remark ? remark : @"";
-    configuration[@"dns"] = @{
-        @"hosts": @{
-          @"domain:googleapis.cn": @"googleapis.com"
-        },
-        @"servers": @[
-          @"1.1.1.1"
-        ]
-    };
+    
+    NSMutableDictionary *dns = @{}.mutableCopy;
+    dns[@"servers"] = @[];
+    configuration[@"dns"] = dns;
+    configuration[@"remark"] = remark;
     configuration[@"address"] = address;
     configuration[@"port"] = port;
-    configuration[@"aid"] = aid;
-    configuration[@"uuid"] = uuid;
     return configuration;
 }
 

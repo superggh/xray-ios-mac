@@ -47,7 +47,7 @@
 
 -(void)reloadData:(NSDictionary *)info{
     NSString *uri = info[@"uri"];
-    NSDictionary *configuration = [ExtProtocolParser parseURI:uri];
+    NSDictionary *configuration = [ETProtocolParser parseURI:uri];
     NSString *remark = configuration[@"remark"];
     self.remarkLab.stringValue = remark ? remark : @"";
     NSImage *image = nil;

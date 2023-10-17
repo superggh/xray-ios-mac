@@ -19,8 +19,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSString *groundID = @"";
-        [ExtVPNManager setGroupID:groundID];
-        [[ExtVPNManager sharedManager] setupExtenstionApplication];
+        [ETVPNManager setGroupID:groundID];
+        [[ETVPNManager sharedManager] setupExtenstionApplication];
     });
 }
 
@@ -43,7 +43,7 @@
     }
     
     BOOL isGlobalMode = [options[@"global"] boolValue];
-    [ExtProtocolParser setGlobalProxyEnable:isGlobalMode];
+    [ETProtocolParser setGlobalProxyEnable:isGlobalMode];
     
     // Add code here to start the process of connecting the tunnel.
     [[LVFutureManager sharedManager] setPacketTunnelProvider:self];
@@ -68,13 +68,13 @@
         NSString *uri = app[@"uri"];
         
         BOOL isGlobalMode = [app[@"global"] boolValue];
-        [ExtProtocolParser setGlobalProxyEnable:isGlobalMode];
+        [ETProtocolParser setGlobalProxyEnable:isGlobalMode];
         done = [[LVFutureManager sharedManager] changeURL:uri];
     }
     else if (type == 3) {
         // ping
         NSArray *urls = app[@"urls"];
-        [[ExtVPNManager sharedManager] ping:urls];
+        [[ETVPNManager sharedManager] ping:urls];
     }
     NSDictionary *response = @{@"desc":@(200), @"version":version, @"tunnel_version":@"1.0.7", @"done":@(done), @"duration":@(LVFutureManager.duration)};
     NSData *ack = [NSJSONSerialization dataWithJSONObject:response options:NSJSONWritingPrettyPrinted error:nil];

@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ExtProtocolParserTrojan : NSObject
+@interface ETProtocolParserTrojan : NSObject
 +(nullable NSDictionary *)parseTrojan:(NSString *)uri;
 
 +(void)setHttpProxyPort:(uint16_t)port;

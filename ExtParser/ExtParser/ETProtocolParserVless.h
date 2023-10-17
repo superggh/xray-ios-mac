@@ -1,23 +1,16 @@
 //
-//  xVPNProtocolParser.h
-//  xVPN
+//  YDProtocolParserVless.h
+//  maodou-vpn
 //
-//  Created by LinkV on 2022/11/1.
+//  Created by Badwin on 2023/9/12.
 //
 
 #import <Foundation/Foundation.h>
 
-typedef enum : NSUInteger {
-    xVPNProtocolVmess,
-    xVPNProtocolVless,
-    xVPNProtocolTrojan,
-    xVPNProtocolSS,
-} xVPNProtocol;
-
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ExtProtocolParser : NSObject
+@interface ETProtocolParserVless : NSObject
++(nullable NSDictionary *)parseVless:(NSString *)uri;
 
 +(void)setHttpProxyPort:(uint16_t)port;
 
@@ -32,9 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setProxyDomainList:(NSArray *)list;
 
 + (void)setBlockDomainList:(NSArray *)list;
-
-+ (NSDictionary *)parseURI:(NSString *)uri;
-
 @end
 
 NS_ASSUME_NONNULL_END

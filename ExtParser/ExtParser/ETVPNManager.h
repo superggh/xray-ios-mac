@@ -41,7 +41,7 @@ typedef enum : NSUInteger {
 
 
 
-@interface ExtVPNManager : NSObject
+@interface ETVPNManager : NSObject
 
 /// 设置组 ID，用于扩展进程和主进程进行通讯，扩展进程和主进程都需要调用，请 App 启动就调用
 /// - Parameter groupId: 组 ID
@@ -120,7 +120,7 @@ typedef enum : NSUInteger {
 @end
 
 // 下面节点是在扩展进程中调用的接口
-@interface ExtVPNManager (Extension)
+@interface ETVPNManager (Extension)
 
 /// 扩展进程调用，主进程不要调
 /// - Parameter ips: url 列表

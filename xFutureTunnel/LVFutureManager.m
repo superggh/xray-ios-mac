@@ -56,25 +56,25 @@
 + (void)setLogLevel:(xLogLevel)level{
     switch (level) {
         case xLogLevelVerbose:
-            [ExtProtocolParser setLogLevel:@"verbose"];
+            [ETProtocolParser setLogLevel:@"verbose"];
             break;
             
         case xLogLevelWarning:
-            [ExtProtocolParser setLogLevel:@"warning"];
+            [ETProtocolParser setLogLevel:@"warning"];
             break;
             
         case xLogLevelInfo:
-            [ExtProtocolParser setLogLevel:@"info"];
+            [ETProtocolParser setLogLevel:@"info"];
             break;
             
         case xLogLevelError:
-            [ExtProtocolParser setLogLevel:@"error"];
+            [ETProtocolParser setLogLevel:@"error"];
             break;
     }
 }
 
 + (void)setGlobalProxyEnable:(BOOL)enable {
-    [ExtProtocolParser setGlobalProxyEnable:enable];
+    [ETProtocolParser setGlobalProxyEnable:enable];
     NSString *file = [[NSBundle mainBundle] pathForResource:@"geosite" ofType:@"dat"];
     if (file && [[NSFileManager defaultManager] fileExistsAtPath:file]) {
         NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/"];
@@ -122,7 +122,7 @@
     networkSettings.IPv4Settings = ipv4Settings;
     
     NEProxySettings *proxySettings = [NEProxySettings new];
-    NEProxyServer *http = [[NEProxyServer alloc] initWithAddress:@"127.0.0.1" port:[ExtProtocolParser HttpProxyPort]];
+    NEProxyServer *http = [[NEProxyServer alloc] initWithAddress:@"127.0.0.1" port:[ETProtocolParser HttpProxyPort]];
     proxySettings.HTTPEnabled = YES;
     proxySettings.HTTPSEnabled = YES;
     proxySettings.HTTPServer = http;
@@ -154,7 +154,7 @@
     NSString *payload;
     if (options[@"uri"]) {
         payload = options[@"uri"];
-        xray = [ExtProtocolParser parseURI:payload];
+        xray = [ETProtocolParser parseURI:payload];
         BOOL global = [options[@"global"] boolValue];
         [LVFutureManager setGlobalProxyEnable:global];
     }
@@ -190,7 +190,7 @@
 
 -(BOOL)changeURL:(NSString *)url {
     _mRunning = NO;
-    NSDictionary *xray = [ExtProtocolParser parseURI:url];
+    NSDictionary *xray = [ETProtocolParser parseURI:url];
     if (!xray) {
         NSLog(@"Invalid protocol url:%@", url);
         return NO;

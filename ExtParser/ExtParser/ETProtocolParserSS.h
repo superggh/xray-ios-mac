@@ -1,5 +1,5 @@
 //
-//  YDProtocolParserVless.h
+//  YDProtocolParserSS.h
 //  maodou-vpn
 //
 //  Created by Badwin on 2023/9/12.
@@ -9,8 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ExtProtocolParserVless : NSObject
-+(nullable NSDictionary *)parseVless:(NSString *)uri;
+@interface ETProtocolParserSS : NSObject
++(nullable NSDictionary *)parseSS:(NSString *)uri;
 
 +(void)setHttpProxyPort:(uint16_t)port;
 

@@ -1,12 +1,12 @@
 //
-//  YDProtocolParserVless.m
+//  YDProtocolParserTrojan.m
 //  maodou-vpn
 //
 //  Created by Badwin on 2023/9/12.
 //
 
-#import "ExtProtocolParserVless.h"
-#import "ExtProtocolParser.h"
+#import "ETProtocolParserTrojan.h"
+#import "ETProtocolParser.h"
 
 static uint16_t __http_proxy_port__ = 1082;
 static NSString *__log_level__ = @"info";
@@ -16,8 +16,7 @@ static NSMutableArray *__directDomainList__ = nil;
 static NSMutableArray *__proxyDomainList__ = nil;
 static NSMutableArray *__blockDomainList__ = nil;
 
-@implementation ExtProtocolParserVless
-
+@implementation ETProtocolParserTrojan
 
 +(void)setHttpProxyPort:(uint16_t)port {
     __http_proxy_port__ = port;
@@ -48,21 +47,11 @@ static NSMutableArray *__blockDomainList__ = nil;
     __blockDomainList__ = list.mutableCopy;
 }
 
-
-+(nullable NSDictionary *)parseVless:(NSString *)uri {
-    NSString *source = uri;
++(nullable NSDictionary *)parseTrojan:(NSString *)uri {
     uri = [uri stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
     NSArray <NSString *> *info = [uri componentsSeparatedByString:@"@"];
     if (info.count < 2) {
-        NSData *payload = [[NSData alloc] initWithBase64EncodedString:uri options:0];
-        if (payload.length > 0) {
-            uri = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
-            info = [uri componentsSeparatedByString:@"@"];
-            if (info.count < 2) {
-                NSLog(@"Invalid payload: %@", source);
-                return nil;
-            }
-        }
+        return nil;
     }
     
     NSString *uuid = info[0];
@@ -79,16 +68,21 @@ static NSMutableArray *__blockDomainList__ = nil;
     NSNumber *port = @([ipAddress[1] integerValue]);
 
     NSArray <NSString *> *suffix = [config[1] componentsSeparatedByString:@"#"];
+    
     if (suffix.count < 2) {
         return nil;
     }
+    
     NSString *remark = suffix[1];
     NSString *tag = @"proxy";
+    
     NSArray <NSString *> *parameters = [suffix[0] componentsSeparatedByString:@"&"];
     
-    NSString *network;
-    NSString *security = @"none";
+    NSString *network = @"tcp";
+    NSString *security = @"tls";
     NSString *flow = @"";
+    NSString *method = @"chacha20-poly1305";
+    BOOL ota = false;
     
     NSString *kcpKey;
     
@@ -99,13 +93,11 @@ static NSMutableArray *__blockDomainList__ = nil;
     NSString *wspath;
     NSString *wshost;
     
-    NSString *fingerprint = @"";
+    BOOL allowInsecure = false;
     
-    NSString *sni = nil;
-    NSString *alpn = nil;
-    NSString *serviceName = nil;
     
-    NSString *email = nil;
+    
+//trojan://3af635f1-d724-4fc4-9f62-07ea01c84a86@pt.mjt001.com:443?allowInsecure=0&peer=pt.mjt001.com&sni=pt.mjt001.com#%E8%91%A1%E8%90%84%E7%89%99PT-T
     
 //vless://c8cd43b0-8674-4595-a2fd-66183ce506f9@161.202.3.131:35073/?type=quic&security=none&quicSecurity=aes-128-gcm&key=quic-1234&headerType=none#%E6%96%B0%E5%8A%A0%E5%9D%A1-vless-quic
     
@@ -136,20 +128,11 @@ static NSMutableArray *__blockDomainList__ = nil;
         else if ([items[0] isEqualToString:@"seed"]) {
             kcpKey = items[1];
         }
-        else if ([items[0] isEqualToString:@"fp"]) {
-            fingerprint = items[1];
+        else if ([items[0] isEqualToString:@"method"]) {
+            method = items[1];
         }
-        else if ([items[0] isEqualToString:@"sni"]) {
-            sni = items[1];
-        }
-        else if ([items[0] isEqualToString:@"alpn"]) {
-            alpn = items[1];
-        }
-        else if ([items[0] isEqualToString:@"serviceName"]) {
-            serviceName = items[1];
-        }
-        else if ([items[0] isEqualToString:@"email"]) {
-            email = items[1];
+        else if ([items[0] isEqualToString:@"ota"]) {
+            ota = [items[1] boolValue];
         }
     }
     if (!address || !port || !uuid || !tag || !network || !security) return nil;
@@ -237,33 +220,32 @@ static NSMutableArray *__blockDomainList__ = nil;
     [inbounds addObject:defaultInbound];
     NSMutableArray *outbounds = [NSMutableArray new];
     configuration[@"outbounds"] = outbounds;
-    
-    NSMutableDictionary *user =  @{
-        @"encryption":@"none",
-        @"id":uuid,
-        @"flow":flow,
-        @"level":@0
-    }.mutableCopy;
-    if (email) {
-        user[@"email"] = email;
-    }
     NSMutableDictionary *outbound = @{
-        @"protocol":@"vless",
+        @"protocol":@"trojan",
         @"tag":tag,
         @"settings": @{
-            @"vnext" : @[
+            @"servers" : @[
                 @{
                     @"address":address,
                     @"port":port,
-                    @"users" :@[ user ]
+                    @"flow":flow,
+                    @"level":@8,
+                    @"method":method,
+                    @"ota":@(ota),
+                    @"password":uuid
                 }
             ]
         },
-        @"streamSettings":@{
-            @"security" : security,
-            @"network" : network
-        }
     }.mutableCopy;
+    NSMutableDictionary *streamSettings = @{
+        @"security" : security,
+        @"network" : network,
+        @"tcpSettings":@{@"header":@{@"type":@"none"}},
+    }.mutableCopy;
+    outbound[@"streamSettings"] = streamSettings;
+    if ([security isEqualToString:@"tls"]) {
+        streamSettings[@"tlsSettings"] = @{@"allowInsecure":@(allowInsecure), @"serverName":address};
+    }
     
     if ([network isEqualToString:@"ws"]) {
         if (wspath && wshost) {
@@ -325,32 +307,6 @@ static NSMutableArray *__blockDomainList__ = nil;
                     @"uplinkCapacity": @12,
                     @"writeBufferSize": @1
                 },
-            };
-        }
-    }
-    else if ([network isEqualToString:@"grpc"]) {
-        if (serviceName && alpn && sni) {
-            outbound[@"streamSettings"] = @{
-                @"network": @"grpc",
-                @"security": @"tls",
-                @"tlsSettings": @{
-                    @"allowInsecure": [NSNumber numberWithBool:false],
-                    @"serverName": sni,
-                    @"alpn": @[
-                        alpn,
-                        @"http/1.1"
-                    ],
-                    @"fingerprint": fingerprint,
-                    @"show": @(false)
-                },
-                @"grpcSettings": @{
-                    @"serviceName": serviceName,
-                    @"multiMode": [NSNumber numberWithBool:false],
-                    @"idle_timeout": @60,
-                    @"health_check_timeout": @20,
-                    @"permit_without_stream": [NSNumber numberWithBool:false],
-                    @"initial_windows_size": @0
-                }
             };
         }
     }

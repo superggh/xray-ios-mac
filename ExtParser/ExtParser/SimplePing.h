@@ -7,7 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "ExtVPNManager.h"
+#import "ETVPNManager.h"
 #include <AssertMacros.h>           // for __Check_Compile_Time
 
 NS_ASSUME_NONNULL_BEGIN

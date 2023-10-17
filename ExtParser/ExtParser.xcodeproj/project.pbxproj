@@ -11,20 +11,20 @@
 		FBFFC2172ACC577800CE9ECE /* ExtParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBFFC20C2ACC577800CE9ECE /* ExtParser.framework */; };
 		FBFFC21C2ACC577800CE9ECE /* ExtParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC21B2ACC577800CE9ECE /* ExtParserTests.m */; };
 		FBFFC21D2ACC577800CE9ECE /* ExtParser.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC20F2ACC577800CE9ECE /* ExtParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBFFC2502ACC57AF00CE9ECE /* ExtProtocolParserVless.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC2422ACC57AE00CE9ECE /* ExtProtocolParserVless.h */; };
-		FBFFC2512ACC57AF00CE9ECE /* ExtProtocolParserSS.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2432ACC57AE00CE9ECE /* ExtProtocolParserSS.m */; };
-		FBFFC2522ACC57AF00CE9ECE /* ExtProtocolParserTrojan.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC2442ACC57AE00CE9ECE /* ExtProtocolParserTrojan.h */; };
+		FBFFC2502ACC57AF00CE9ECE /* ETProtocolParserVless.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC2422ACC57AE00CE9ECE /* ETProtocolParserVless.h */; };
+		FBFFC2512ACC57AF00CE9ECE /* ETProtocolParserSS.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2432ACC57AE00CE9ECE /* ETProtocolParserSS.m */; };
+		FBFFC2522ACC57AF00CE9ECE /* ETProtocolParserTrojan.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC2442ACC57AE00CE9ECE /* ETProtocolParserTrojan.h */; };
 		FBFFC2532ACC57AF00CE9ECE /* SimplePing.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2452ACC57AE00CE9ECE /* SimplePing.m */; };
-		FBFFC2542ACC57AF00CE9ECE /* ExtProtocolParserSS.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC2462ACC57AE00CE9ECE /* ExtProtocolParserSS.h */; };
-		FBFFC2552ACC57AF00CE9ECE /* ExtProtocolParserVmess.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2472ACC57AE00CE9ECE /* ExtProtocolParserVmess.m */; };
-		FBFFC2562ACC57AF00CE9ECE /* ExtVPNManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2482ACC57AE00CE9ECE /* ExtVPNManager.m */; };
-		FBFFC2572ACC57AF00CE9ECE /* ExtProtocolParserTrojan.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2492ACC57AE00CE9ECE /* ExtProtocolParserTrojan.m */; };
-		FBFFC2582ACC57AF00CE9ECE /* ExtVPNManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24A2ACC57AE00CE9ECE /* ExtVPNManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBFFC2542ACC57AF00CE9ECE /* ETProtocolParserSS.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC2462ACC57AE00CE9ECE /* ETProtocolParserSS.h */; };
+		FBFFC2552ACC57AF00CE9ECE /* ETProtocolParserVmess.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2472ACC57AE00CE9ECE /* ETProtocolParserVmess.m */; };
+		FBFFC2562ACC57AF00CE9ECE /* ETVPNManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2482ACC57AE00CE9ECE /* ETVPNManager.m */; };
+		FBFFC2572ACC57AF00CE9ECE /* ETProtocolParserTrojan.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC2492ACC57AE00CE9ECE /* ETProtocolParserTrojan.m */; };
+		FBFFC2582ACC57AF00CE9ECE /* ETVPNManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24A2ACC57AE00CE9ECE /* ETVPNManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBFFC2592ACC57AF00CE9ECE /* SimplePing.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24B2ACC57AE00CE9ECE /* SimplePing.h */; };
 		FBFFC25A2ACC57AF00CE9ECE /* ExtProtocolParserVmess.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24C2ACC57AE00CE9ECE /* ExtProtocolParserVmess.h */; };
-		FBFFC25B2ACC57AF00CE9ECE /* ExtProtocolParser.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24D2ACC57AE00CE9ECE /* ExtProtocolParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBFFC25C2ACC57AF00CE9ECE /* ExtProtocolParserVless.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC24E2ACC57AE00CE9ECE /* ExtProtocolParserVless.m */; };
-		FBFFC25D2ACC57AF00CE9ECE /* ExtProtocolParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC24F2ACC57AF00CE9ECE /* ExtProtocolParser.m */; };
+		FBFFC25B2ACC57AF00CE9ECE /* ETProtocolParser.h in Headers */ = {isa = PBXBuildFile; fileRef = FBFFC24D2ACC57AE00CE9ECE /* ETProtocolParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBFFC25C2ACC57AF00CE9ECE /* ETProtocolParserVless.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC24E2ACC57AE00CE9ECE /* ETProtocolParserVless.m */; };
+		FBFFC25D2ACC57AF00CE9ECE /* ETProtocolParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFFC24F2ACC57AF00CE9ECE /* ETProtocolParser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,20 +43,20 @@
 		FBFFC2102ACC577800CE9ECE /* ExtParser.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ExtParser.docc; sourceTree = "<group>"; };
 		FBFFC2162ACC577800CE9ECE /* ExtParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExtParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBFFC21B2ACC577800CE9ECE /* ExtParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtParserTests.m; sourceTree = "<group>"; };
-		FBFFC2422ACC57AE00CE9ECE /* ExtProtocolParserVless.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtProtocolParserVless.h; sourceTree = "<group>"; };
-		FBFFC2432ACC57AE00CE9ECE /* ExtProtocolParserSS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtProtocolParserSS.m; sourceTree = "<group>"; };
-		FBFFC2442ACC57AE00CE9ECE /* ExtProtocolParserTrojan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtProtocolParserTrojan.h; sourceTree = "<group>"; };
+		FBFFC2422ACC57AE00CE9ECE /* ETProtocolParserVless.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETProtocolParserVless.h; sourceTree = "<group>"; };
+		FBFFC2432ACC57AE00CE9ECE /* ETProtocolParserSS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParserSS.m; sourceTree = "<group>"; };
+		FBFFC2442ACC57AE00CE9ECE /* ETProtocolParserTrojan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETProtocolParserTrojan.h; sourceTree = "<group>"; };
 		FBFFC2452ACC57AE00CE9ECE /* SimplePing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimplePing.m; sourceTree = "<group>"; };
-		FBFFC2462ACC57AE00CE9ECE /* ExtProtocolParserSS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtProtocolParserSS.h; sourceTree = "<group>"; };
-		FBFFC2472ACC57AE00CE9ECE /* ExtProtocolParserVmess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtProtocolParserVmess.m; sourceTree = "<group>"; };
-		FBFFC2482ACC57AE00CE9ECE /* ExtVPNManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtVPNManager.m; sourceTree = "<group>"; };
-		FBFFC2492ACC57AE00CE9ECE /* ExtProtocolParserTrojan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtProtocolParserTrojan.m; sourceTree = "<group>"; };
-		FBFFC24A2ACC57AE00CE9ECE /* ExtVPNManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtVPNManager.h; sourceTree = "<group>"; };
+		FBFFC2462ACC57AE00CE9ECE /* ETProtocolParserSS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETProtocolParserSS.h; sourceTree = "<group>"; };
+		FBFFC2472ACC57AE00CE9ECE /* ETProtocolParserVmess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParserVmess.m; sourceTree = "<group>"; };
+		FBFFC2482ACC57AE00CE9ECE /* ETVPNManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETVPNManager.m; sourceTree = "<group>"; };
+		FBFFC2492ACC57AE00CE9ECE /* ETProtocolParserTrojan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParserTrojan.m; sourceTree = "<group>"; };
+		FBFFC24A2ACC57AE00CE9ECE /* ETVPNManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETVPNManager.h; sourceTree = "<group>"; };
 		FBFFC24B2ACC57AE00CE9ECE /* SimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePing.h; sourceTree = "<group>"; };
 		FBFFC24C2ACC57AE00CE9ECE /* ExtProtocolParserVmess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtProtocolParserVmess.h; sourceTree = "<group>"; };
-		FBFFC24D2ACC57AE00CE9ECE /* ExtProtocolParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtProtocolParser.h; sourceTree = "<group>"; };
-		FBFFC24E2ACC57AE00CE9ECE /* ExtProtocolParserVless.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtProtocolParserVless.m; sourceTree = "<group>"; };
-		FBFFC24F2ACC57AF00CE9ECE /* ExtProtocolParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtProtocolParser.m; sourceTree = "<group>"; };
+		FBFFC24D2ACC57AE00CE9ECE /* ETProtocolParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETProtocolParser.h; sourceTree = "<group>"; };
+		FBFFC24E2ACC57AE00CE9ECE /* ETProtocolParserVless.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParserVless.m; sourceTree = "<group>"; };
+		FBFFC24F2ACC57AF00CE9ECE /* ETProtocolParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETProtocolParser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,18 +100,18 @@
 			isa = PBXGroup;
 			children = (
 				FBFFC20F2ACC577800CE9ECE /* ExtParser.h */,
-				FBFFC24D2ACC57AE00CE9ECE /* ExtProtocolParser.h */,
-				FBFFC24F2ACC57AF00CE9ECE /* ExtProtocolParser.m */,
-				FBFFC2462ACC57AE00CE9ECE /* ExtProtocolParserSS.h */,
-				FBFFC2432ACC57AE00CE9ECE /* ExtProtocolParserSS.m */,
-				FBFFC2442ACC57AE00CE9ECE /* ExtProtocolParserTrojan.h */,
-				FBFFC2492ACC57AE00CE9ECE /* ExtProtocolParserTrojan.m */,
-				FBFFC2422ACC57AE00CE9ECE /* ExtProtocolParserVless.h */,
-				FBFFC24E2ACC57AE00CE9ECE /* ExtProtocolParserVless.m */,
+				FBFFC24D2ACC57AE00CE9ECE /* ETProtocolParser.h */,
+				FBFFC24F2ACC57AF00CE9ECE /* ETProtocolParser.m */,
+				FBFFC2462ACC57AE00CE9ECE /* ETProtocolParserSS.h */,
+				FBFFC2432ACC57AE00CE9ECE /* ETProtocolParserSS.m */,
+				FBFFC2442ACC57AE00CE9ECE /* ETProtocolParserTrojan.h */,
+				FBFFC2492ACC57AE00CE9ECE /* ETProtocolParserTrojan.m */,
+				FBFFC2422ACC57AE00CE9ECE /* ETProtocolParserVless.h */,
+				FBFFC24E2ACC57AE00CE9ECE /* ETProtocolParserVless.m */,
 				FBFFC24C2ACC57AE00CE9ECE /* ExtProtocolParserVmess.h */,
-				FBFFC2472ACC57AE00CE9ECE /* ExtProtocolParserVmess.m */,
-				FBFFC24A2ACC57AE00CE9ECE /* ExtVPNManager.h */,
-				FBFFC2482ACC57AE00CE9ECE /* ExtVPNManager.m */,
+				FBFFC2472ACC57AE00CE9ECE /* ETProtocolParserVmess.m */,
+				FBFFC24A2ACC57AE00CE9ECE /* ETVPNManager.h */,
+				FBFFC2482ACC57AE00CE9ECE /* ETVPNManager.m */,
 				FBFFC24B2ACC57AE00CE9ECE /* SimplePing.h */,
 				FBFFC2452ACC57AE00CE9ECE /* SimplePing.m */,
 				FBFFC2102ACC577800CE9ECE /* ExtParser.docc */,
@@ -135,13 +135,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBFFC21D2ACC577800CE9ECE /* ExtParser.h in Headers */,
-				FBFFC25B2ACC57AF00CE9ECE /* ExtProtocolParser.h in Headers */,
+				FBFFC25B2ACC57AF00CE9ECE /* ETProtocolParser.h in Headers */,
 				FBFFC25A2ACC57AF00CE9ECE /* ExtProtocolParserVmess.h in Headers */,
-				FBFFC2542ACC57AF00CE9ECE /* ExtProtocolParserSS.h in Headers */,
+				FBFFC2542ACC57AF00CE9ECE /* ETProtocolParserSS.h in Headers */,
 				FBFFC2592ACC57AF00CE9ECE /* SimplePing.h in Headers */,
-				FBFFC2582ACC57AF00CE9ECE /* ExtVPNManager.h in Headers */,
-				FBFFC2502ACC57AF00CE9ECE /* ExtProtocolParserVless.h in Headers */,
-				FBFFC2522ACC57AF00CE9ECE /* ExtProtocolParserTrojan.h in Headers */,
+				FBFFC2582ACC57AF00CE9ECE /* ETVPNManager.h in Headers */,
+				FBFFC2502ACC57AF00CE9ECE /* ETProtocolParserVless.h in Headers */,
+				FBFFC2522ACC57AF00CE9ECE /* ETProtocolParserTrojan.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,12 +243,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBFFC2532ACC57AF00CE9ECE /* SimplePing.m in Sources */,
-				FBFFC2552ACC57AF00CE9ECE /* ExtProtocolParserVmess.m in Sources */,
-				FBFFC2572ACC57AF00CE9ECE /* ExtProtocolParserTrojan.m in Sources */,
-				FBFFC25C2ACC57AF00CE9ECE /* ExtProtocolParserVless.m in Sources */,
-				FBFFC2562ACC57AF00CE9ECE /* ExtVPNManager.m in Sources */,
-				FBFFC2512ACC57AF00CE9ECE /* ExtProtocolParserSS.m in Sources */,
-				FBFFC25D2ACC57AF00CE9ECE /* ExtProtocolParser.m in Sources */,
+				FBFFC2552ACC57AF00CE9ECE /* ETProtocolParserVmess.m in Sources */,
+				FBFFC2572ACC57AF00CE9ECE /* ETProtocolParserTrojan.m in Sources */,
+				FBFFC25C2ACC57AF00CE9ECE /* ETProtocolParserVless.m in Sources */,
+				FBFFC2562ACC57AF00CE9ECE /* ETVPNManager.m in Sources */,
+				FBFFC2512ACC57AF00CE9ECE /* ETProtocolParserSS.m in Sources */,
+				FBFFC25D2ACC57AF00CE9ECE /* ETProtocolParser.m in Sources */,
 				FBFFC2112ACC577800CE9ECE /* ExtParser.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

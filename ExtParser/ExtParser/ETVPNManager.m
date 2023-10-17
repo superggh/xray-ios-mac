@@ -6,7 +6,7 @@
 //  Copyright © 2023 RongVP. All rights reserved.
 //
 
-#import "ExtVPNManager.h"
+#import "ETVPNManager.h"
 #import <ExtParser/ExtParser.h>
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
@@ -23,11 +23,11 @@ static NSString *__groundID__ = @"group.com.ext.vpn";
 typedef void(^YDFetchCompletion)(NETunnelProviderManager *manager);
 
 
-@interface ExtVPNManager ()<SimplePingDelegate>
+@interface ETVPNManager ()<SimplePingDelegate>
 
 @end
 
-@interface ExtVPNManager ()
+@interface ETVPNManager ()
 @property (nonatomic, strong)NSUserDefaults *userDefaults;
 @property (nonatomic)BOOL isExtension;
 @property (nonatomic)NSInteger notifier;
@@ -35,7 +35,7 @@ typedef void(^YDFetchCompletion)(NETunnelProviderManager *manager);
 @end
 
 
-@implementation ExtVPNManager
+@implementation ETVPNManager
 {
     NETunnelProviderManager *_providerManager;
     NSTimer *_durationTimer;
@@ -43,7 +43,7 @@ typedef void(^YDFetchCompletion)(NETunnelProviderManager *manager);
     YDPingResponse _rsp;
 }
 +(instancetype)sharedManager{
-    static ExtVPNManager *__manager__;
+    static ETVPNManager *__manager__;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         __manager__ = [[self alloc] init];
@@ -323,7 +323,7 @@ typedef void(^YDFetchCompletion)(NETunnelProviderManager *manager);
 -(void)pingInHost:(NSArray<NSString *> *)ips response:(YDPingResponse)response {
     NSMutableArray *pings = NSMutableArray.new;
     [ips enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSDictionary *protocol = [ExtProtocolParser parseURI:obj];
+        NSDictionary *protocol = [ETProtocolParser parseURI:obj];
         NSString *address = protocol[@"address"];
         SimplePing *ping = [[SimplePing alloc] initWithHostName:address];
         ping.delegate = self;
@@ -412,7 +412,7 @@ typedef void(^YDFetchCompletion)(NETunnelProviderManager *manager);
 -(void)ping:(NSArray *)ips {
     NSMutableArray *pings = NSMutableArray.new;
     [ips enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSDictionary *protocol = [ExtProtocolParser parseURI:obj];
+        NSDictionary *protocol = [ETProtocolParser parseURI:obj];
         NSString *address = protocol[@"address"];
         SimplePing *ping = [[SimplePing alloc] initWithHostName:address];
         ping.delegate = self;

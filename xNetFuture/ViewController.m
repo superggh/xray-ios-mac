@@ -93,7 +93,7 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     [super viewDidLoad];
     // Do view setup here.
     self.vpnTextField.delegate = self;
-    // vmess, vless, trojan, ss
+    //    TODO: This is protocol address, vmess, vless, trojan, ss
     self.vpnTextField.stringValue = @"";
     self.startConnectButton.wantsLayer = YES;
     self.startConnectButton.layer.backgroundColor = [NSColor colorWithRed:2/255.0 green:187/255.0 blue:0/255.0 alpha:1.0].CGColor;
@@ -141,7 +141,7 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     self.controlBackgroundView.wantsLayer = YES;
 
 
-    [[ExtVPNManager sharedManager] setupVPNManager];
+    [[ETVPNManager sharedManager] setupVPNManager];
     [self parseRequest];
     self.globalModeButton.selected = [_delegate getBoolForKey:@"kYDApplicationGlobalVPNModeEnable" defaultValue:NO];
     
@@ -247,8 +247,8 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     self.globalModeButton.selected = !self.globalModeButton.selected;
     [_delegate setBool:self.globalModeButton.selected forKey:@"kYDApplicationGlobalVPNModeEnable"];
     
-    ExtVPNManager.sharedManager.isGlobalMode = self.globalModeButton.selected;
-    NSLog(@"isGlobalMode: %@", @(ExtVPNManager.sharedManager.isGlobalMode));   
+    ETVPNManager.sharedManager.isGlobalMode = self.globalModeButton.selected;
+    NSLog(@"isGlobalMode: %@", @(ETVPNManager.sharedManager.isGlobalMode));   
 }
 
 -(BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row {
@@ -272,7 +272,7 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     selectedRow = row;
     
     NSString *uri = selected[@"uri"];
-    NSDictionary *configuration = [ExtProtocolParser parseURI:uri];
+    NSDictionary *configuration = [ETProtocolParser parseURI:uri];
     [self parseOutbounds:configuration uri:uri];
     return YES;
 }
@@ -309,7 +309,7 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
 - (IBAction)add2ListView:(id)sender {
 //    ECHO Test
 
-    [[ExtVPNManager sharedManager] echo];
+    [[ETVPNManager sharedManager] echo];
     
     if (!currentConfiguration) {
         [_delegate makeToast:NSLocalizedString(@"Configuration Invaild", nil)];
@@ -363,7 +363,7 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
 }
 
 -(void)parse:(NSString *)uri {
-    NSDictionary *configuration = [ExtProtocolParser parseURI:uri];
+    NSDictionary *configuration = [ETProtocolParser parseURI:uri];
     if (configuration) {
         __block BOOL found = NO;
         [self.dataSource enumerateObjectsUsingBlock:^(NSDictionary *jobj, NSUInteger jdx, BOOL * _Nonnull jstop) {
@@ -388,15 +388,15 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
         uri = x.firstObject;
         NSString *lastURI = x.lastObject;
         if (lastURI.length == 0) [x removeLastObject];
-        configuration = [ExtProtocolParser parseURI:uri];
+        configuration = [ETProtocolParser parseURI:uri];
         if (configuration) {
             [x enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSDictionary *info = @{@"uri":obj};
                 __block NSInteger found = -1;
-                NSDictionary *cfg = [ExtProtocolParser parseURI:obj];
+                NSDictionary *cfg = [ETProtocolParser parseURI:obj];
                 [self.dataSource enumerateObjectsUsingBlock:^(NSDictionary *jobj, NSUInteger jdx, BOOL * _Nonnull jstop) {
                     NSString *jstr = jobj[@"uri"];
-                    NSDictionary *jcfg = [ExtProtocolParser parseURI:jstr];
+                    NSDictionary *jcfg = [ETProtocolParser parseURI:jstr];
                     if ([jstr isEqualToString:obj] || [self configuration:cfg equalTo:jcfg]) {
                         found = YES;
                         *jstop = YES;
@@ -452,12 +452,12 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     [self.view.window makeFirstResponder:nil];
 }
 - (IBAction)startConnect:(id)sender {
-    if (ExtVPNManager.sharedManager.status == YDVPNStatusConnected) {
-        [[ExtVPNManager sharedManager] disconnect];
+    if (ETVPNManager.sharedManager.status == YDVPNStatusConnected) {
+        [[ETVPNManager sharedManager] disconnect];
     }
     else {
         NSString *url = self.dataSource[selectedRow][@"uri"];
-        [[ExtVPNManager sharedManager] connect:url];
+        [[ETVPNManager sharedManager] connect:url];
     }
 }
 
@@ -510,7 +510,7 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
 }
 
 -(void)vpnConnectionStatusDidChanged{
-    switch (ExtVPNManager.sharedManager.status) {
+    switch (ETVPNManager.sharedManager.status) {
         case YDVPNStatusConnected:{
             self.statusLab.textColor = [NSColor systemGreenColor];
             self.statusLab.stringValue = @"Connected";
@@ -520,7 +520,7 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
             
             
             if (self.vpnTextField.stringValue.length == 0) {
-                self.vpnTextField.stringValue = ExtVPNManager.sharedManager.connectedURL;
+                self.vpnTextField.stringValue = ETVPNManager.sharedManager.connectedURL;
                 [self parseRequest];
             }
         }

@@ -26,24 +26,29 @@
     // Do any additional setup after loading the view.
     
  
-    [[ExtVPNManager sharedManager] setupVPNManager];
+    [[ETVPNManager sharedManager] setupVPNManager];
     
     self.protocolTextField.delegate = self;
     
-//    TODO: This is protocol address
+    //    TODO: This is protocol address, vmess, vless, trojan, ss
     self.protocolTextField.text = @"";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vpnConnectionStatusDidChanged) name:@"kApplicationVPNStatusDidChangeNotification" object:nil];
+    ETVPNManager.sharedManager.isGlobalMode = YES;
 }
 
 -(void)vpnConnectionStatusDidChanged{
-    switch (ExtVPNManager.sharedManager.status) {
+    switch (ETVPNManager.sharedManager.status) {
         case YDVPNStatusConnected:{
             self.statusLab.textColor = [UIColor systemGreenColor];
             self.statusLab.text = @"Connected";
             
             [self.startConnectButton setTitle:@"Disconnect" forState:UIControlStateNormal];
             [self.startConnectButton setTitleColor:UIColor.redColor forState:UIControlStateNormal];
+            
+            if (self.protocolTextField.text.length == 0) {
+                self.protocolTextField.text = ETVPNManager.sharedManager.connectedURL;
+            }
         }
             break;
             
@@ -71,46 +76,16 @@
 }
 
 - (IBAction)startConnectButtonClick:(id)sender {
-    if (!_providerManager) {
-        return;
+    if (ETVPNManager.sharedManager.status == YDVPNStatusConnected) {
+        [[ETVPNManager sharedManager] disconnect];
     }
-    NETunnelProviderSession *session = (NETunnelProviderSession *)_providerManager.connection;
-    NSString *title = [self.startConnectButton titleForState:UIControlStateNormal];
-    if ([title isEqualToString:NSLocalizedString(@"Connect", nil)]) {
-        NSString *uri = self.protocolTextField.text;
-        NSError *error;
-        
-        BOOL isGlobalMode = YES;
-        
-        NSDictionary *providerConfiguration = @{@"type":@(0), @"uri":uri, @"global":@(isGlobalMode)};
-        NETunnelProviderProtocol *protocolConfiguration = (NETunnelProviderProtocol *)_providerManager.protocolConfiguration;
-        NSMutableDictionary *copy = protocolConfiguration.providerConfiguration.mutableCopy;
-        copy[@"configuration"] = providerConfiguration;
-        protocolConfiguration.providerConfiguration = copy;
-        [_providerManager saveToPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
-            if (error) {
-                NSLog(@"saveToPreferencesWithCompletionHandler:%@", error);
-            }
-        }];
-        [session startVPNTunnelWithOptions:@{@"uri":uri, @"global":@(isGlobalMode)} andReturnError:&error];
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }
-    else {
-        [session stopVPNTunnel];
+    else{
+        [ETVPNManager.sharedManager connect:self.protocolTextField.text];
     }
 }
 
 - (IBAction)echoButton:(id)sender {
-        NETunnelProviderSession *connection = (NETunnelProviderSession *)_providerManager.connection;
-        NSDictionary *echo = @{@"type":@1};
-        [connection sendProviderMessage:[NSJSONSerialization dataWithJSONObject:echo options:(NSJSONWritingPrettyPrinted) error:nil] returnError:nil responseHandler:^(NSData * _Nullable responseData) {
-    
-            NSString *x = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            NSLog(@"%@", x);
-    
-        }];
+    [[ETVPNManager sharedManager] echo];
 }
 
 @end
