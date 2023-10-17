@@ -81,7 +81,6 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
 
 @implementation ViewController
 {
-    NETunnelProviderManager *_providerManager;
     NSInteger selectedRow;
     NSString *currentConfiguration;
     dispatch_queue_t mPingQueue;
@@ -96,7 +95,6 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     self.vpnTextField.delegate = self;
     // vmess, vless, trojan, ss
     self.vpnTextField.stringValue = @"";
-    NSLog(@"%@", [ExtProtocolParser parseURI:self.vpnTextField.stringValue]);
     self.startConnectButton.wantsLayer = YES;
     self.startConnectButton.layer.backgroundColor = [NSColor colorWithRed:2/255.0 green:187/255.0 blue:0/255.0 alpha:1.0].CGColor;
     self.startConnectButton.contentTintColor = [NSColor whiteColor];
@@ -142,10 +140,12 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:nil];
     self.controlBackgroundView.wantsLayer = YES;
 
-    __weak ViewController *weakSelf = self;
+
     [[ExtVPNManager sharedManager] setupVPNManager];
     [self parseRequest];
     self.globalModeButton.selected = [_delegate getBoolForKey:@"kYDApplicationGlobalVPNModeEnable" defaultValue:NO];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vpnConnectionStatusDidChanged) name:@"kApplicationVPNStatusDidChangeNotification" object:nil];
 }
 
 -(void)scrollViewBoundsDidChange:(NSNotification *)notification {
@@ -159,9 +159,6 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
 }
 
 -(void)controlTextDidEndEditing:(NSNotification *)obj {
-    if (!_providerManager) {
-        return;
-    }
     [self parseRequest];
 }
 
@@ -202,53 +199,56 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     }
     [self.tableView reloadData];
     
-    NSMutableArray *dataSource = self.dataSource.mutableCopy;
-    NETunnelProviderSession *connection = (NETunnelProviderSession *)_providerManager.connection;
-    __weak ViewController *weakSelf = self;
-    dispatch_async(mPingQueue, ^{
-        for (NSDictionary *info in dataSource) {
-            __strong ViewController*strongSelf = weakSelf;
-            if (!strongSelf) break;
-            NSString *uri = info[@"uri"];
-            NSDictionary *configuration = [ExtProtocolParser parseURI:uri];
-            NSArray <NSDictionary *>* outbounds = configuration[@"outbounds"];
-            __block NSDictionary *proxy = nil;
-            [outbounds enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                NSString *protocol = obj[@"protocol"];
-                if ([protocol isEqualToString:@"vmess"] || [protocol isEqualToString:@"vless"]) {
-                    *stop = YES;
-                    proxy = obj;
-                }
-            }];
-            if (proxy) {
-                NSArray <NSDictionary *>*vnext = proxy[@"settings"][@"vnext"];
-                NSString *ip = vnext[0][@"address"];
-                NSDictionary *msg = @{@"action":@"ping", @"pings":@[ip]};
-                NSError *returnError;
-                NSData *x = [NSJSONSerialization dataWithJSONObject:msg options:NSJSONWritingPrettyPrinted error:nil];
-                dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-                __block NSDictionary *r = nil;
-                [connection sendProviderMessage:x returnError:&returnError responseHandler:^(NSData * _Nullable responseData) {
-                    if (responseData) {
-                        NSDictionary *rsp = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
-                        r = rsp;
-                    }
-                    dispatch_semaphore_signal(sem);
-                }];
-                if (!returnError)
-                    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf reloadItem:uri rsp:r];
-                });
-            }
-        }
-    });
+//    NSMutableArray *dataSource = self.dataSource.mutableCopy;
+//    NETunnelProviderSession *connection = (NETunnelProviderSession *)_providerManager.connection;
+//    __weak ViewController *weakSelf = self;
+//    dispatch_async(mPingQueue, ^{
+//        for (NSDictionary *info in dataSource) {
+//            __strong ViewController*strongSelf = weakSelf;
+//            if (!strongSelf) break;
+//            NSString *uri = info[@"uri"];
+//            NSDictionary *configuration = [ExtProtocolParser parseURI:uri];
+//            NSArray <NSDictionary *>* outbounds = configuration[@"outbounds"];
+//            __block NSDictionary *proxy = nil;
+//            [outbounds enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                NSString *protocol = obj[@"protocol"];
+//                if ([protocol isEqualToString:@"vmess"] || [protocol isEqualToString:@"vless"]) {
+//                    *stop = YES;
+//                    proxy = obj;
+//                }
+//            }];
+//            if (proxy) {
+//                NSArray <NSDictionary *>*vnext = proxy[@"settings"][@"vnext"];
+//                NSString *ip = vnext[0][@"address"];
+//                NSDictionary *msg = @{@"action":@"ping", @"pings":@[ip]};
+//                NSError *returnError;
+//                NSData *x = [NSJSONSerialization dataWithJSONObject:msg options:NSJSONWritingPrettyPrinted error:nil];
+//                dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+//                __block NSDictionary *r = nil;
+//                [connection sendProviderMessage:x returnError:&returnError responseHandler:^(NSData * _Nullable responseData) {
+//                    if (responseData) {
+//                        NSDictionary *rsp = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
+//                        r = rsp;
+//                    }
+//                    dispatch_semaphore_signal(sem);
+//                }];
+//                if (!returnError)
+//                    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+//
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [strongSelf reloadItem:uri rsp:r];
+//                });
+//            }
+//        }
+//    });
 }
 
 - (IBAction)globalModeButtonClick:(id)sender {
     self.globalModeButton.selected = !self.globalModeButton.selected;
     [_delegate setBool:self.globalModeButton.selected forKey:@"kYDApplicationGlobalVPNModeEnable"];
+    
+    ExtVPNManager.sharedManager.isGlobalMode = self.globalModeButton.selected;
+    NSLog(@"isGlobalMode: %@", @(ExtVPNManager.sharedManager.isGlobalMode));   
 }
 
 -(BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row {
@@ -308,14 +308,9 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
 
 - (IBAction)add2ListView:(id)sender {
 //    ECHO Test
-    NETunnelProviderSession *connection = (NETunnelProviderSession *)_providerManager.connection;
-    NSDictionary *echo = @{@"type":@1};
-    [connection sendProviderMessage:[NSJSONSerialization dataWithJSONObject:echo options:(NSJSONWritingPrettyPrinted) error:nil] returnError:nil responseHandler:^(NSData * _Nullable responseData) {
 
-        NSString *x = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", x);
-
-    }];
+    [[ExtVPNManager sharedManager] echo];
+    
     if (!currentConfiguration) {
         [_delegate makeToast:NSLocalizedString(@"Configuration Invaild", nil)];
         return;
@@ -457,32 +452,12 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     [self.view.window makeFirstResponder:nil];
 }
 - (IBAction)startConnect:(id)sender {
-    if (!_providerManager) {
-        return;
-    }
-    NETunnelProviderSession *session = (NETunnelProviderSession *)_providerManager.connection;
-    NSString *title = self.startConnectButton.title;
-    if ([title isEqualToString:NSLocalizedString(@"Connect", nil)]) {
-        NSString *uri = self.dataSource.count > 0 ? self.dataSource[selectedRow][@"uri"] : currentConfiguration;
-        NSError *error;
-        
-        NSDictionary *providerConfiguration = @{@"type":@(0), @"uri":uri, @"global":@(self.globalModeButton.selected)};
-        NETunnelProviderProtocol *protocolConfiguration = (NETunnelProviderProtocol *)_providerManager.protocolConfiguration;
-        NSMutableDictionary *copy = protocolConfiguration.providerConfiguration.mutableCopy;
-        copy[@"configuration"] = providerConfiguration;
-        protocolConfiguration.providerConfiguration = copy;
-        [_providerManager saveToPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
-            if (error) {
-                NSLog(@"saveToPreferencesWithCompletionHandler:%@", error);
-            }
-        }];
-        [session startVPNTunnelWithOptions:@{@"uri":uri, @"global":@(self.globalModeButton.selected)} andReturnError:&error];
-        if (error) {
-            NSLog(@"%@", error);
-        }
+    if (ExtVPNManager.sharedManager.status == YDVPNStatusConnected) {
+        [[ExtVPNManager sharedManager] disconnect];
     }
     else {
-        [session stopVPNTunnel];
+        NSString *url = self.dataSource[selectedRow][@"uri"];
+        [[ExtVPNManager sharedManager] connect:url];
     }
 }
 
@@ -534,30 +509,30 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
     }
 }
 
--(void)connectionStatusChanged:(NSNotification *)notification{
-    NEVPNConnection *connection = notification.object;
-    switch (connection.status) {
-        case NEVPNStatusInvalid:
-            self.statusLab.textColor = [NSColor systemRedColor];
-            self.statusLab.stringValue = @"Invalid";
-            break;
-            
-        case NEVPNStatusConnected:{
+-(void)vpnConnectionStatusDidChanged{
+    switch (ExtVPNManager.sharedManager.status) {
+        case YDVPNStatusConnected:{
             self.statusLab.textColor = [NSColor systemGreenColor];
             self.statusLab.stringValue = @"Connected";
             
             self.startConnectButton.title = NSLocalizedString(@"Disconnect", nil);
             self.startConnectButton.layer.backgroundColor = [NSColor systemRedColor].CGColor;
+            
+            
+            if (self.vpnTextField.stringValue.length == 0) {
+                self.vpnTextField.stringValue = ExtVPNManager.sharedManager.connectedURL;
+                [self parseRequest];
+            }
         }
             break;
             
-        case NEVPNStatusConnecting: {
+        case YDVPNStatusConnecting: {
             self.statusLab.textColor = [NSColor systemOrangeColor];
             self.statusLab.stringValue = @"Connecting";
         }
             break;
             
-        case NEVPNStatusDisconnected:{
+        case YDVPNStatusDisconnected:{
             self.statusLab.textColor = [NSColor systemRedColor];
             self.statusLab.stringValue = @"Disconnected";
             
@@ -565,21 +540,10 @@ NSString *const kYDApplicationVPNListKey = @"kYDApplicationVPNListKey";
             self.startConnectButton.layer.backgroundColor = [NSColor colorWithRed:2/255.0 green:187/255.0 blue:0/255.0 alpha:1.0].CGColor;
         }
             break;
-            
-        case NEVPNStatusReasserting:{
-            self.statusLab.textColor = [NSColor systemRedColor];
-            self.statusLab.stringValue = @"Reasserting";
-        }
-            break;
-        case NEVPNStatusDisconnecting: {
-            self.statusLab.stringValue = @"Disconnecting";
-            self.statusLab.textColor = [NSColor systemRedColor];
-        }
-            break;
-            
         default:
             break;
     }
+
 }
 
 @end
