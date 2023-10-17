@@ -3,6 +3,13 @@
 
 `Use Apple NetworkExtension`
 
+1. Supports the four common protocols: vmess, vless, ss, and trojan.
+2. Automatically parses URLs for the four protocols.
+3. Supports Developer ID notarization for Apple Network Extension, enabling global proxy implementation. This technology is quite impressive! By using Network Extension, it essentially proxies all network traffic on the computer, including the system terminal. There's no need to separately configure terminal proxies, which is commonly referred to as 'tun mode'. Moreover, it offers superior stability compared to tun.
+4. We also provide SDKs for Windows and Android, utilizing 'tun mode' instead of system-wide proxies. The SDK will be released after stable testing.
+
+
+
 
 Download it and use it directly
 
