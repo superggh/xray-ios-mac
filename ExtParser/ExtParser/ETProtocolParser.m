@@ -106,7 +106,7 @@ static NSMutableArray *__blockDomainList__ = nil;
     else if ([list[0] hasPrefix:@"trojan"]) {
         protocol = xVPNProtocolTrojan;
     }
-    else if ([list[0] hasPrefix:@"ss"]) {
+    else if ([list[0] hasPrefix:@"ss"] || [list[0] hasPrefix:@"ssr"]) {
         protocol = xVPNProtocolSS;
     }
     else {

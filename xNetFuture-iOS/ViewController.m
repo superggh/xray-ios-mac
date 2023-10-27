@@ -35,6 +35,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vpnConnectionStatusDidChanged) name:@"kApplicationVPNStatusDidChangeNotification" object:nil];
     ETVPNManager.sharedManager.isGlobalMode = YES;
+    
+    NSDictionary *info = [ETProtocolParser parseURI:self.protocolTextField.text];
+    NSLog(@"%@", info);
+    
 }
 
 -(void)vpnConnectionStatusDidChanged{

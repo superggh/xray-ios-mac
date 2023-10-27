@@ -55,12 +55,19 @@ static NSMutableArray *__blockDomainList__ = nil;
         return nil;
     }
     NSError *error;
-    NSDictionary *info = [NSJSONSerialization JSONObjectWithData:payload options:NSJSONReadingMutableContainers error:&error];
+    NSMutableDictionary *info = [[NSJSONSerialization JSONObjectWithData:payload options:NSJSONReadingMutableContainers error:&error] mutableCopy];
     if (error) {
         NSLog(@"%@", error);
         return nil;
     }
     NSString *address = info[@"add"];
+    if (!address) {
+        NSMutableArray *inbounds = [info[@"inbounds"] mutableCopy];
+        [inbounds removeObjectAtIndex:0];
+        info[@"inbounds"] = inbounds;
+        [info removeObjectForKey:@"transport"];
+        return info;
+    }
     NSNumber *port = info[@"port"];
     if (port && ![port isKindOfClass:NSNumber.class]) {
         port = @(port.integerValue);
