@@ -163,7 +163,7 @@
         return completionHandler(error);
     }
     NSData *c = [NSJSONSerialization dataWithJSONObject:xray options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *r = FutureStartVPN(c, @"");
+    NSString *r = FutureStartVPN(c, payload);
     if (r.length > 0){
         NSLog(@"Start vpn instance:%@", r);
         NSError *error = [NSError errorWithDomain:@"Invalid json" code:204 userInfo:nil];
